@@ -1,0 +1,50 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const blogs = await getCollection('blogCollection');
+
+  // console.log(blogs)
+
+  return blogs.map((blog) => ({
+    params: { id: blog.slug },
+    props: { blog },
+  }));
+}
+
+const { blog } = Astro.props;
+const { data, slug } = blog;
+const { title, author, img, readtime, description, date } = data;
+
+const { Content } = await render(blog); //to render the content in blog format with the 'prose' html
+---
+
+<Layout title={`${title} - Ren's Blog`}>
+  <div class='flex gap-12 m-20'>
+    <aside class='flex flex-col items-center gap-4'>
+      <button
+        class='bg-pink-300 hover:bg-pink-400 text-white font-bold py-2 px-4 rounded'
+        ><a href='/' class='opacity-70'>← Volver atrás</a></button
+      >
+      <img
+        src={`/${img}`}
+        alt={title}
+        class='rounded h-70'
+        transition:name={`img-${slug}`}
+        height='50px'
+        width='300x'
+      />
+    </aside>
+
+    <main class='max-w-3xl'>
+      <h1 class='text-4xl font-bold mb-4' transition:name={`title-${title}`}>
+        {title}
+      </h1>
+      <div>By: {author}</div>
+      <div>Readtime: {readtime} min</div>
+      <div class='mb-1'>{date.toLocaleDateString()}</div>
+      <div class='prose prose-invert'><Content /></div>
+    </main>
+  </div>
+</Layout>

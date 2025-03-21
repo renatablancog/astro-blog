@@ -1,11 +1,55 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const blogs = await getCollection('blogCollection');
+// console.log(blogs)
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<Layout title="Ren's Blog">
+  <main>
+    <h1 class='text-center text-7xl font-extrabold mb-24 mt-8'>
+      Ren's Blogs 🌷
+    </h1>
+
+    <section aria-label="Ren's Blog for Everyone">
+      <div class='px-4 mx-auto max-w-screen-xl'>
+        <div class='grid gap-6 md:grid-cols-2'>
+          {
+            blogs.map((blog) => {
+              const { data, slug } = blog;
+              const { title, author, img, readtime, date, description } = data;
+
+              return (
+                <article class='flex'>
+                  <a
+                    href={`/blog/${slug}`}
+                    class='mb-2 xl:mb-0 transition hover:scale-110'>
+                    <img
+                      src={`/images/${img}`}
+                      alt={title}
+                      class='mr-7 w-48 h-40 rounded'
+                      transition:name={`img-${slug}`}
+                    />
+                  </a>
+
+                  <div class='flex flex-col justify-center ml-8'>
+                    <h2
+                      transition:name={`title-${title}`}
+                      class='mb-2 text-2xl font-bold leading-tight text-white'>
+                      {title}
+                    </h2>
+
+                    <p class='mb-4 text-gray-300 max-w-sm'>{description}</p>
+                    <span class='text-xs'>Lectura en {readtime} minutos</span>
+                    <div class='text-xs'>{date.toLocaleDateString()}</div>
+                  </div>
+                </article>
+              );
+            })
+          }
+        </div>
+      </div>
+    </section>
+  </main></Layout
+>
