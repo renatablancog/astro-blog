@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
+  //getStaticPaths tells Astro which pages to generate.
   const blogs = await getCollection('blogCollection');
 
   // console.log(blogs)
@@ -21,14 +22,14 @@ const { Content } = await render(blog); //to render the content in blog format w
 ---
 
 <Layout title={`${title} - Ren's Blog`}>
-  <div class='flex gap-12 m-20'>
+  <div class='flex gap-12 m-5'>
     <aside class='flex flex-col items-center gap-4'>
       <button
-        class='bg-pink-300 hover:bg-pink-400 text-white font-bold py-2 px-4 rounded'
+        class='bg-pink-300 hover:bg-pink-400 text-white font-bold py-1 px-2 rounded'
         ><a href='/' class='opacity-70'>← Volver atrás</a></button
       >
       <img
-        src={`/${img}`}
+        src={`/images/${img}`}
         alt={title}
         class='rounded h-70'
         transition:name={`img-${slug}`}
